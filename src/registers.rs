@@ -63,13 +63,13 @@ impl CPURegisters {
     }
 
     pub fn set_u16(&mut self, reg: CPURegister16, value: u16) {
-        let bytes = u16::to_le_bytes(value);
+        let bytes = u16::to_be_bytes(value);
 
         match reg {
-            AF => [self[F], self[A]] = [bytes[0] & 0xF0, bytes[1]],
-            BC => [self[C], self[B]] = bytes,
-            DE => [self[E], self[D]] = bytes,
-            HL => [self[L], self[H]] = bytes,
+            AF => [self[A], self[F]] = [bytes[0], bytes[1] & 0xF0],
+            BC => [self[B], self[C]] = bytes,
+            DE => [self[D], self[E]] = bytes,
+            HL => [self[H], self[L]] = bytes,
             SP => self.sp = value,
             PC => self.pc = value,
         }
